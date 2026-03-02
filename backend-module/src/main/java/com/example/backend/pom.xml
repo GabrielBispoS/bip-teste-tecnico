@@ -26,6 +26,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
         <!-- JPA + H2 (exemplo banco em memória para rodar os testes) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -50,6 +56,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.example.backend.BackendApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
