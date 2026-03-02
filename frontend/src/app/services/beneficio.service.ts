@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { retry, delay } from 'rxjs/operators';
 import { Beneficio, TransferenciaDTO } from '../models/beneficio.model';
 
 @Injectable({
@@ -11,9 +12,11 @@ export class BeneficioService {
 
   constructor(private http: HttpClient) {}
 
-  listarTodos(): Observable<Beneficio[]> {
-    return this.http.get<Beneficio[]>(this.apiUrl);
-  }
+  listarTodos() {
+  return this.http.get<Beneficio[]>(this.apiUrl).pipe(
+    retry({ count: 5, delay: 2000 })
+  );
+}
 
   transferir(dto: TransferenciaDTO): Observable<string> {
     return this.http.post(

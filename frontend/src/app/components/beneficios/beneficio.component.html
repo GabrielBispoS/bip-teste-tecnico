@@ -1,7 +1,12 @@
 <div class="main-container">
   <h1>💰 Gestão de Benefícios</h1>
 
-  <section class="table-section">
+  <section *ngIf="loading" class="loading-section">
+    <div class="spinner"></div>
+    <p>Conectando ao servidor... Aguarde a inicialização.</p>
+  </section>
+
+  <section class="table-section" *ngIf="!loading">
     <h3>Saldos Atuais</h3>
     <table border="1">
       <thead>
@@ -21,6 +26,10 @@
         </tr>
       </tbody>
     </table>
+    
+    <p *ngIf="beneficios.length === 0" class="empty-msg">
+      Nenhum benefício encontrado no banco de dados.
+    </p>
   </section>
 
   <hr>
@@ -28,13 +37,28 @@
   <section class="transfer-section">
     <h3>🔄 Nova Transferência</h3>
     <div class="form-group">
-      <input type="number" [(ngModel)]="transferencia.fromId" placeholder="ID Origem">
-      <input type="number" [(ngModel)]="transferencia.toId" placeholder="ID Destino">
-      <input type="number" [(ngModel)]="transferencia.valor" placeholder="Valor R$">
-      <button [disabled]="transferencia.valor <= 0" (click)="executarTransferencia()">
-        Transferir
+      <div class="input-wrapper">
+        <label>Origem (ID):</label>
+        <input type="number" [(ngModel)]="transferencia.fromId" placeholder="Ex: 1">
+      </div>
+      
+      <div class="input-wrapper">
+        <label>Destino (ID):</label>
+        <input type="number" [(ngModel)]="transferencia.toId" placeholder="Ex: 2">
+      </div>
+      
+      <div class="input-wrapper">
+        <label>Valor R$:</label>
+        <input type="number" [(ngModel)]="transferencia.valor" placeholder="0.00">
+      </div>
+
+      <button [disabled]="transferencia.valor <= 0 || loading" (click)="executarTransferencia()">
+        {{ loading ? 'Aguarde...' : 'Transferir' }}
       </button>
     </div>
-    <p class="status-msg" *ngIf="mensagem">{{ mensagem }}</p>
+    
+    <p class="status-msg" [ngClass]="{'error': mensagem.includes('Erro')}" *ngIf="mensagem">
+      {{ mensagem }}
+    </p>
   </section>
 </div>

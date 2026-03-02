@@ -9,12 +9,13 @@ import { Beneficio, TransferenciaDTO } from '../../models/beneficio.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './beneficio.component.html',
-  styleUrls: ['./beneficio.component.css']
+  styleUrls: ['./beneficio.component.css'],
 })
 export class BeneficioComponent implements OnInit {
   beneficios: Beneficio[] = [];
   transferencia: TransferenciaDTO = { fromId: 0, toId: 0, valor: 0 };
   mensagem: string = '';
+  loading: boolean = false;
 
   constructor(
     private service: BeneficioService,
@@ -32,14 +33,18 @@ export class BeneficioComponent implements OnInit {
 }
 
 carregar(): void {
+  this.loading = true; // Ativa o loading
   this.service.listarTodos().subscribe({
     next: (data) => {
       this.beneficios = data;
+      this.loading = false; // Desativa
       this.cdr.detectChanges();
     },
     error: (err) => {
-      console.error('Erro ao listar:', err);
-      this.mensagem = 'Erro ao conectar com o servidor. Verifique se o Backend está rodando.';
+      this.loading = false;
+      console.error('Back ainda não respondeu...', err);
+      // Opcional: Tentar novamente em 2 segundos
+      setTimeout(() => this.carregar(), 2000);
     }
   });
 }
