@@ -1,44 +1,50 @@
 # Desafio Técnico Bip Brasil - Fullstack Java + Angular
 
-Repositório com a solução desenvolvida para o desafio técnico de Pessoa Desenvolvedora Fullstack (Java + Angular). 
+Solução robusta desenvolvida para o desafio de Pessoa Desenvolvedora Fullstack, focada em escalabilidade, integridade transacional e padrões de arquitetura moderna.
 
-O projeto consiste na correção de um bug de concorrência num serviço EJB legado, além do desenvolvimento completo das camadas de Backend (API REST) e Frontend (SPA).
+## Arquitetura Proposta (Cloud-Ready)
 
-## Diferenciais Implementados (Seniority Level)
-Além dos requisitos básicos, foram aplicadas as seguintes práticas de engenharia:
-- **Dockerização Completa:** Orquestração de ambiente via Docker Compose para garantir consistência no build.
-- **CI/CD Pipeline:** Integração contínua configurada via GitHub Actions (.github/workflows) para automação de testes e builds.
-- **Observabilidade:** Implementação do **Spring Boot Actuator** para monitoramento de métricas de performance (CPU, Memória, Health).
-- **Testes Automatizados:** Cobertura de testes unitários no módulo EJB com JUnit 5 e Mockito, validando regras de negócio e integridade transacional.
+O projeto foi estruturado seguindo princípios de **Microsserviços**, separando a lógica de negócio pesada (EJB) da camada de interface com o usuário (Backend API).
 
-## Arquitetura e Soluções Implementadas
+- **EJB-Module (Core Business):** Responsável pelas regras críticas de saldo e transferências.
+- **Backend-Module (Edge API):** Atua como o Gateway de entrada, gerenciando requisições REST e expondo métricas de saúde.
+- **Frontend-Module (Angular SPA):** Interface reativa com feedback instantâneo e tratamento de estados de carregamento (Async UI).
 
-### 1. Correção do EJB (Controlo de Concorrência)
-O serviço `BeneficioEjbService` foi refatorado para garantir consistência em ambientes de alta concorrência:
-- **Optimistic Locking:** Uso de `@Version` na entidade JPA para prevenir *lost updates*.
-- **Validações:** Bloqueio de transferências inconsistentes (valores negativos ou superiores ao saldo).
-- **Controlo Transacional:** Garantia de atomicidade através de `@TransactionAttribute`.
 
-### 2. Backend (Spring Boot) & Frontend (Angular)
-- **Backend:** API REST documentada, estruturada em camadas e com tratamento global de exceções.
-- **Frontend:** SPA em Angular 17 utilizando **Standalone Components** e organização por domínios (Components, Services, Models).
+
+## Diferenciais de Engenharia (Seniority Level)
+
+Além dos requisitos básicos, foram aplicadas práticas para ambientes de missão crítica:
+
+* **Resiliência no Build:** Orquestração via Docker Compose com separação de estágios (*multi-stage build*) para garantir imagens leves e seguras.
+* **Observabilidade:** Implementação do **Spring Boot Actuator** permitindo monitoramento em tempo real (Health, Metrics, Info).
+* **Testes de Regressão:** Cobertura de testes unitários no módulo EJB com **JUnit 5 e Mockito**, validando cenários de sucesso, saldo insuficiente e concorrência.
+* **UX Reativa:** Frontend implementado com `ChangeDetectorRef` e *loading states* para lidar com o tempo de boot de ambientes distribuídos.
+
+## Visão de Evolução: Mensageria & Microsserviços
+
+Considerando os requisitos de alta disponibilidade e desacoplamento:
+1.  **Event-Driven:** A arquitetura está preparada para substituir a chamada síncrona entre Backend e EJB por um modelo de mensageria via **RabbitMQ** ou **Kafka**.
+2.  **Escalabilidade Horizontal:** O uso de EJB isolado permite que o processamento de benefícios seja escalado independentemente da API de interface.
 
 ---
 
-## Como executar o projeto
+## Como Executar o Projeto
 
 ### Pré-requisitos
 - Docker e Docker Compose instalados.
 
 ### Passos para execução
 1. Clone o repositório.
-2. Na raiz do projeto, execute:
+
+2. Na raiz do projeto, execute o comando para build limpo:
    ```bash
    docker compose up -d --build
 
-## Endpoints Principais
+### Endpoints Principais
+
    Frontend (Angular): http://localhost:4200
 
    Documentação API (Swagger): http://localhost:8080/swagger-ui.html
 
-   Métricas de Performance (Actuator): http://localhost:8080/actuator/metrics
+   Saúde do Sistema (Actuator): http://localhost:8080/actuator/health
