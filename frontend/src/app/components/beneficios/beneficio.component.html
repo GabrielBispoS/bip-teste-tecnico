@@ -1,0 +1,38 @@
+<div class="main-container">
+  <h1>💰 Gestão de Benefícios</h1>
+
+  <section class="table-section">
+    <h3>Saldos Atuais</h3>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Beneficiário</th>
+          <th>Saldo</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of beneficios">
+          <td>{{ b.id }}</td>
+          <td>{{ b.nome }}</td>
+          <td class="valor">{{ b.valor | currency:'BRL' }}</td>
+          <td>{{ b.ativo ? '✅ Ativo' : '❌ Inativo' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr>
+
+  <section class="transfer-section">
+    <h3>🔄 Nova Transferência</h3>
+    <div class="form-group">
+      <input type="number" [(ngModel)]="transferencia.fromId" placeholder="ID Origem">
+      <input type="number" [(ngModel)]="transferencia.toId" placeholder="ID Destino">
+      <input type="number" [(ngModel)]="transferencia.amount" placeholder="Valor R$">
+      <button (click)="executarTransferencia()">Transferir</button>
+    </div>
+    <p class="status-msg" *ngIf="mensagem">{{ mensagem }}</p>
+  </section>
+</div>

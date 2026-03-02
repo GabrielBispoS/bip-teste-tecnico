@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: backend-module/Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: bip-backend
+    restart: unless-stopped
+
+  frontend:
+    build: 
+      context: ./frontend
+    ports:
+      - "4200:80"
+    container_name: bip-frontend
+    depends_on:
+      - backend
+    restart: unless-stopped
