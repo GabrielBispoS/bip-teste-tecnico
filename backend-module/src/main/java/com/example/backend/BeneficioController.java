@@ -15,7 +15,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/v1/beneficios")
+@RequestMapping("/api/beneficios")
 @Tag(name = "Benefícios", description = "API para gerenciamento e transferência de benefícios")
 public class BeneficioController {
 

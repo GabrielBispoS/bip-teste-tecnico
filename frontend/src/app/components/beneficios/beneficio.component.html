@@ -30,7 +30,7 @@
     <div class="form-group">
       <input type="number" [(ngModel)]="transferencia.fromId" placeholder="ID Origem">
       <input type="number" [(ngModel)]="transferencia.toId" placeholder="ID Destino">
-      <input type="number" [(ngModel)]="transferencia.amount" placeholder="Valor R$">
+      <input type="number" [(ngModel)]="transferencia.valor" placeholder="Valor R$">
       <button (click)="executarTransferencia()">Transferir</button>
     </div>
     <p class="status-msg" *ngIf="mensagem">{{ mensagem }}</p>

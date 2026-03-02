@@ -10,5 +10,5 @@ export interface Beneficio {
 export interface TransferenciaDTO {
   fromId: number;
   toId: number;
-  amount: number;
+  valor: number;
 }

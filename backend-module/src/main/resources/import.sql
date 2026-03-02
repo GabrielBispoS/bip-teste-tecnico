@@ -1,0 +1,3 @@
+INSERT INTO BENEFICIO (id, nome, descricao, valor, ativo, version) VALUES (1, 'Vale Refeição - Bip', 'Benefício de alimentação', 500.00, true, 0);
+INSERT INTO BENEFICIO (id, nome, descricao, valor, ativo, version) VALUES (2, 'Vale Transporte - Bip', 'Benefício de locomoção', 250.00, true, 0);
+INSERT INTO BENEFICIO (id, nome, descricao, valor, ativo, version) VALUES (3, 'Auxílio Home Office', 'Ajuda de custo remota', 1000.00, true, 0);

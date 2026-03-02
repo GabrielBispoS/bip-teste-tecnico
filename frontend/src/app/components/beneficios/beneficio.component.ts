@@ -13,7 +13,7 @@ import { Beneficio, TransferenciaDTO } from '../../models/beneficio.model';
 })
 export class BeneficioComponent implements OnInit {
   beneficios: Beneficio[] = [];
-  transferencia: TransferenciaDTO = { fromId: 0, toId: 0, amount: 0 };
+  transferencia: TransferenciaDTO = { fromId: 0, toId: 0, valor: 0 };
   mensagem: string = '';
 
   constructor(private service: BeneficioService) {}
@@ -27,12 +27,17 @@ export class BeneficioComponent implements OnInit {
   }
 
   executarTransferencia(): void {
-    this.service.transferir(this.transferencia).subscribe({
-      next: (msg) => {
-        this.mensagem = msg;
-        this.carregar(); // Recarrega saldos após sucesso
-      },
-      error: (err) => this.mensagem = 'Erro: ' + (err.error || 'Falha na operação')
-    });
-  }
+  console.log('Tentando transferir:', this.transferencia);
+  this.service.transferir(this.transferencia).subscribe({
+    next: (msg) => {
+      console.log('Sucesso do servidor:', msg);
+      this.mensagem = msg;
+      this.carregar();
+    },
+    error: (err) => {
+      console.error('Erro capturado:', err);
+      this.mensagem = 'Erro: ' + (err.error || 'Falha na operação');
+    }
+  });
+}
 }
