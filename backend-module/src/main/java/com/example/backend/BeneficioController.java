@@ -1,19 +1,29 @@
 package com.example.backend;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.example.backend.dto.TransferenciaDTO;
 import com.example.backend.model.Beneficio;
 import com.example.backend.repository.BeneficioRepository;
 import com.example.ejb.BeneficioEjbService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/beneficios")
 @Tag(name = "Benefícios", description = "API para gerenciamento e transferência de benefícios")
@@ -70,7 +80,7 @@ public class BeneficioController {
     @Operation(summary = "Realizar transferência entre benefícios usando EJB")
     public ResponseEntity<String> transferir(@RequestBody TransferenciaDTO dto) {
         try {
-            ejbService.transfer(dto.fromId(), dto.toId(), dto.amount());
+            ejbService.transfer(dto.fromId(), dto.toId(), dto.valor());
             return ResponseEntity.ok("Transferência realizada com sucesso!");
         } catch (IllegalArgumentException | IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

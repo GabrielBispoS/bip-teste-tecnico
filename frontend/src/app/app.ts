@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { BeneficioComponent } from './components/beneficios/beneficio.component'; 
 
-// frontend/src/app/app.ts
 @Component({
   selector: 'app-root',
   standalone: true,

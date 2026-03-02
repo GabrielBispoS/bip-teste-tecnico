@@ -5,5 +5,5 @@ import java.math.BigDecimal;
 public record TransferenciaDTO(
         Long fromId,
         Long toId,
-        BigDecimal amount
+        BigDecimal valor
 ) {}

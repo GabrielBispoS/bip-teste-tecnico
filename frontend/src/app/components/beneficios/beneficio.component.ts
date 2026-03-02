@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BeneficioService } from '../../services/beneficio.service';
@@ -16,27 +16,55 @@ export class BeneficioComponent implements OnInit {
   transferencia: TransferenciaDTO = { fromId: 0, toId: 0, valor: 0 };
   mensagem: string = '';
 
-  constructor(private service: BeneficioService) {}
+  constructor(
+    private service: BeneficioService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.carregar();
-  }
+  this.carregar();
 
-  carregar(): void {
-    this.service.listarTodos().subscribe(data => this.beneficios = data);
-  }
-
-  executarTransferencia(): void {
-  console.log('Tentando transferir:', this.transferencia);
-  this.service.transferir(this.transferencia).subscribe({
-    next: (msg) => {
-      console.log('Sucesso do servidor:', msg);
-      this.mensagem = msg;
+  setTimeout(() => {
+    if (this.beneficios.length === 0) {
       this.carregar();
+    }
+  }, 3000);
+}
+
+carregar(): void {
+  this.service.listarTodos().subscribe({
+    next: (data) => {
+      this.beneficios = data;
+      this.cdr.detectChanges();
     },
     error: (err) => {
-      console.error('Erro capturado:', err);
+      console.error('Erro ao listar:', err);
+      this.mensagem = 'Erro ao conectar com o servidor. Verifique se o Backend está rodando.';
+    }
+  });
+}
+
+executarTransferencia(): void {
+  if (this.transferencia.valor <= 0) {
+    this.mensagem = 'Erro: O valor deve ser maior que zero.';
+    return;
+  }
+
+  this.service.transferir(this.transferencia).subscribe({
+    next: (msg) => {
+      this.mensagem = '✅ Transferência realizada com sucesso!';
+      this.transferencia = { fromId: 0, toId: 0, valor: 0 }; 
+
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.carregar();
+        this.cdr.detectChanges();
+      }, 300);
+    },
+    error: (err) => {
       this.mensagem = 'Erro: ' + (err.error || 'Falha na operação');
+      this.cdr.detectChanges();
     }
   });
 }
